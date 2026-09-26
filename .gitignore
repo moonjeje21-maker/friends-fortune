@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+._*
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs & temp files
+*.log
+*.tmp
+
+# Environment / secrets
+.env
+.env.*
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Python (python3 -m http.server)
+__pycache__/
