@@ -43,7 +43,7 @@ Currently 24 episodes / 200 fortunes. `lucky` is kept in the data but no longer 
 ### Logic (`app.js`)
 
 - `POOL` flattens every episode's fortunes into `{ ep, grade, ko, en, line }` once at load.
-- Clicking a `.mug` calls `draw(mug)`: picks a random index (rerolling only if it equals the previous one), marks the mug `.chosen`, then after 500ms renders the card, hides `#pick`, and shows `#result` and `#again`. The mug you pick does not affect the result.
+- Clicking a `.mug` calls `draw(mug)`: picks a random index (rerolling only if it equals the previous one), disables all mugs, adds `.picking` to `#mugs` (dims the others) and marks the mug `.chosen`, then after 500ms renders the card, hides `#pick`, and shows `#result` and `#again`. The mug you pick does not affect the result.
 - `reset()` (the "Pick again" button) hides the card and brings the mugs back.
 - `render()` fills `#result` via `innerHTML`: a `.card` box holding only the ☕ grade meter and the line (biggest English, small Korean translation, speaker), then outside the box the fortune (English large, Korean small) and a one-line episode `code · title` (`moment` is not shown). Every data string goes through `escapeHtml()` — keep doing so for any new field.
 
@@ -62,3 +62,9 @@ The result block (`.result`) fades in with the `rise` animation (0.5s, CSS only)
 - Mugs are pure CSS (`.body`, `.handle`, `.saucer` spans); colors cycle yellow / blue / red via `:nth-child(3n…)`. Six in a row, three per row at ≤480px.
 - `[hidden] { display: none !important; }` is needed because `.result` sets `display: flex`.
 - Fonts: Gowun Batang (Korean) and Fraunces (English) from Google Fonts, Georgia fallback.
+
+## Other files
+
+- `plans/*.md` (Korean) record how the content and design were built: content-plan covers how lines were picked from the scripts and checked (verbatim match, no duplicates, grade spread); design-plan's "현재 화면" section describes the final screen. Update them if you change the design or data rules.
+- `.claude/output-styles/beginner.md` is a project output style that explains things for a programming beginner in plain Korean.
+- Code comments are in Korean. Match that when adding comments.
