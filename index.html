@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>오늘의 프렌즈의 말</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Fraunces:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="logo" role="img" aria-label="FRIENDS"></div>
+  <main class="wrap">
+    <header>
+      <h1>오늘의 프렌즈의 말</h1>
+    </header>
+
+    <section class="pick" id="pick">
+      <p class="hint">커피 한 잔을 골라 보세요 · Pick a cup</p>
+      <div class="mugs" id="mugs">
+        <button class="mug" aria-label="1번 잔 고르기 · Cup 1"><span class="body"></span><span class="handle"></span><span class="saucer"></span></button>
+        <button class="mug" aria-label="2번 잔 고르기 · Cup 2"><span class="body"></span><span class="handle"></span><span class="saucer"></span></button>
+        <button class="mug" aria-label="3번 잔 고르기 · Cup 3"><span class="body"></span><span class="handle"></span><span class="saucer"></span></button>
+        <button class="mug" aria-label="4번 잔 고르기 · Cup 4"><span class="body"></span><span class="handle"></span><span class="saucer"></span></button>
+        <button class="mug" aria-label="5번 잔 고르기 · Cup 5"><span class="body"></span><span class="handle"></span><span class="saucer"></span></button>
+        <button class="mug" aria-label="6번 잔 고르기 · Cup 6"><span class="body"></span><span class="handle"></span><span class="saucer"></span></button>
+      </div>
+    </section>
+
+    <section class="result" id="result" aria-live="polite" hidden></section>
+
+    <button id="again" class="again" hidden>Pick again</button>
+  </main>
+
+  <script src="fortunes.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

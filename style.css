@@ -1,0 +1,180 @@
+:root {
+  --bg: #060407; /* 로고 이미지 바탕색과 같게 */
+  --ink: #f3ede4;
+  --muted: #a39c94;
+  --line: #2c2830;
+  --card: #141216;
+  --yellow: #f5d90a;
+  --blue: #3a4f8f; /* 로고 파랑(#2B3A67)을 검은 바탕에서 보이도록 살짝 밝힘 */
+  --red: #c8231f;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Gowun Batang", Georgia, serif;
+}
+
+/* 상단 FRIENDS 로고 (images/friends-bg.jpg, 바탕색과 같은 검정) */
+.logo {
+  height: clamp(110px, 26vw, 240px);
+  background: url("images/friends-bg.jpg") center / contain no-repeat;
+  /* 이미지 가장자리를 바탕에 자연스럽게 녹인다 */
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, #000 60%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at center, #000 60%, transparent 100%);
+}
+
+.wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 16px 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+header { text-align: center; }
+h1 { margin: 0; font-size: 28px; line-height: 1.3; }
+
+/* 머그잔 고르기 */
+.pick { width: 100%; text-align: center; }
+.hint { margin: 0 0 18px; font-size: 14px; color: var(--muted); }
+.mugs {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  justify-items: center;
+}
+@media (max-width: 480px) {
+  .mugs { grid-template-columns: repeat(3, 1fr); row-gap: 20px; }
+}
+.mug {
+  --c: var(--yellow);
+  position: relative;
+  width: 72px;
+  height: 80px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.3s;
+}
+.mug:nth-child(3n + 2) { --c: var(--blue); }
+.mug:nth-child(3n) { --c: var(--red); }
+.mug .body {
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  width: 48px;
+  height: 50px;
+  background: var(--c);
+  border-radius: 4px 4px 20px 20px;
+  box-shadow: inset 0 5px 0 #4a2c1a; /* 커피 수면 */
+}
+.mug .handle {
+  position: absolute;
+  left: 50px;
+  top: 22px;
+  width: 20px;
+  height: 26px;
+  border: 6px solid var(--c);
+  border-left: 0;
+  border-radius: 0 14px 14px 0;
+}
+.mug .saucer {
+  position: absolute;
+  left: 0;
+  bottom: 12px;
+  width: 72px;
+  height: 9px;
+  background: #e9e1d6;
+  border-radius: 50%;
+}
+.mug:hover, .mug:focus-visible { transform: translateY(-6px); }
+.mug:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 8px; }
+.mug:disabled { cursor: default; }
+.mugs.picking .mug:not(.chosen) { opacity: 0.2; }
+.mug.chosen { animation: jiggle 0.5s ease-in-out; }
+@keyframes jiggle {
+  0%, 100% { transform: translateY(-6px) rotate(0); }
+  25% { transform: translateY(-10px) rotate(-8deg); }
+  50% { transform: translateY(-10px) rotate(8deg); }
+  75% { transform: translateY(-8px) rotate(-4deg); }
+}
+
+/* 결과: 대사 박스(.card) → 해석(.fortune) → 에피소드(.episode) */
+.result {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  animation: rise 0.5s ease-out;
+}
+.card {
+  padding: 24px 22px 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+.cups { text-align: center; font-size: 24px; letter-spacing: 4px; }
+.cups .off { filter: grayscale(1); opacity: 0.2; }
+
+blockquote { margin: 0; }
+.line-en {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-size: 26px;
+  line-height: 1.35;
+}
+.line-ko { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+blockquote cite {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-style: normal;
+  color: var(--yellow);
+}
+.fortune { padding: 0 8px; text-align: center; }
+.fortune .en {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.fortune .ko { margin: 6px 0 0; font-size: 13px; line-height: 1.6; color: var(--muted); }
+.episode { margin: 0; text-align: center; font-size: 12px; color: var(--muted); }
+.episode strong { color: var(--red); font-weight: 400; }
+
+.again {
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 12px 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: #111;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.again:hover { transform: translateY(-2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mug, .again { transition: none; }
+  .mug.chosen, .result { animation: none; }
+}
