@@ -21,7 +21,15 @@ node -e 'global.window={};require("./fortunes.js");const E=window.EPISODES;conso
 
 ## Architecture
 
-Scripts are loaded as classic `<script>` tags in order: `fortunes.js` sets the global `window.EPISODES`, then `app.js` reads it at load time. No modules — keep that order and keep data on `window`.
+Scripts are loaded as classic `<script>` tags in order: `fortunes.js` sets the global `window.EPISODES`, `gifs.js` sets `window.GIFS`, then `app.js` reads them at load time. No modules — keep that order and keep data on `window`.
+
+### GIF data (`gifs.js`)
+
+```js
+window.GIFS = { S01E01: [["LoUmCyntgoQA6Rf2Mz", ["Rachel"]], ...], ... } // episode code → [GIPHY id, [main characters]]
+```
+
+300 GIFs from GIPHY's Friends Season 1 episode pages (https://giphy.com/friends/seasons/season-1). Generated once from GIPHY tags by a throwaway script (not in the repo); fix a wrong character tag by editing the file by hand. Only the six main characters are tagged; untagged GIFs never show.
 
 ### Data shape (`fortunes.js`)
 
@@ -43,9 +51,10 @@ Currently 24 episodes / 200 fortunes. `lucky` is kept in the data but no longer 
 ### Logic (`app.js`)
 
 - `POOL` flattens every episode's fortunes into `{ ep, grade, ko, en, line }` once at load.
-- Clicking a `.mug` calls `draw(mug)`: picks a random index (rerolling only if it equals the previous one), disables all mugs, adds `.picking` to `#mugs` (dims the others) and marks the mug `.chosen`, then after 500ms renders the card, hides `#pick`, and shows `#result` and `#again`. The mug you pick does not affect the result.
-- `reset()` (the "Pick again" button) hides the card and brings the mugs back.
-- `render()` fills `#result` via `innerHTML`: a `.card` box holding only the ☕ grade meter and the line (biggest English, small Korean translation, speaker), then outside the box the fortune (English large, Korean small) and a one-line episode `code · title` (`moment` is not shown). Every data string goes through `escapeHtml()` — keep doing so for any new field.
+- Clicking a `.mug` calls `draw(mug)`: picks a random index (rerolling only if it equals the previous one), disables all mugs, adds `.picking` to `#mugs` (dims the others) and marks the mug `.chosen`, then after 500ms renders the card, hides `#pick` and the `#title` header, and shows `#result`, `#again` and `#episode`. The mug you pick does not affect the result.
+- `reset()` (the "Pick again" button) hides the card and episode line and brings the title and mugs back.
+- `pickGif(f)` returns a random GIPHY id for the line's speaker (`line.who.en`): same episode first, then any episode, else `null` (side characters get no GIF).
+- `render()` fills `#result` via `innerHTML`: a `.card` box holding the speaker GIF (`gifHtml()`: GIPHY `giphy.mp4` in `<video autoplay loop muted playsinline>` with a "via GIPHY" link, 6:5 via CSS), the ☕ grade meter and the line (biggest English, small Korean translation, speaker), then outside the box the fortune (English large, Korean small). It also fills `#episode` (below the "Pick again" button, small gray) with a one-line `code · title` (`moment` is not shown). Every data string goes through `escapeHtml()` — keep doing so for any new field.
 
 ### Animation timing (JS ↔ CSS coupling)
 
