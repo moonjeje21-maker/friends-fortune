@@ -13,11 +13,14 @@ open index.html                 # works directly from file://
 python3 -m http.server 8000     # or serve at http://localhost:8000
 ```
 
-Quick data sanity check (episode count / fortune count):
+Quick data sanity check (episode count / fortune count, then GIF count and how many fortunes get a same-episode / other-episode / no GIF — expect `24 200`, `300 162 14 24`):
 
 ```bash
 node -e 'global.window={};require("./fortunes.js");const E=window.EPISODES;console.log(E.length,E.reduce((a,e)=>a+e.fortunes.length,0))'
+node -e 'global.window={};require("./fortunes.js");require("./gifs.js");const G=window.GIFS,all=Object.values(G).flat(),c=[0,0,0];for(const e of window.EPISODES)for(const f of e.fortunes){const h=([,w])=>w.includes(f[3].who.en);c[G[e.code].some(h)?0:all.some(h)?1:2]++}console.log(all.length,...c)'
 ```
+
+GIFs load from `media.giphy.com`, so they need a network connection. In an automated Chrome tab that counts as hidden (`document.visibilityState === "hidden"`), the videos never load and show as black boxes; check playback in a normal visible tab.
 
 ## Architecture
 
@@ -35,11 +38,11 @@ window.GIFS = { S01E01: [["LoUmCyntgoQA6Rf2Mz", ["Rachel"]], ...], ... } // epis
 
 ```js
 {
-  code: "S01E01",                       // shown as-is in the card footer
+  code: "S01E01",                       // shown as-is in the #episode line; also the key into window.GIFS
   title: "The One Where ...",
   moment: { ko: "...", en: "..." },
   lucky:  { ko: "...", en: "..." },
-  fortunes: [[grade, ko, en, line], ...], // grade 1–5 → GRADE_LABEL + coffee-cup count in app.js
+  fortunes: [[grade, ko, en, line], ...], // grade 1–5 → number of lit ☕ in cups() in app.js
 }
 // line = { who: { en, ko }, en: "real script line", ko: "Korean translation" } — rendered as a blockquote
 ```
@@ -74,6 +77,7 @@ The result block (`.result`) fades in with the `rise` animation (0.5s, CSS only)
 
 ## Other files
 
-- `plans/*.md` (Korean) record how the content and design were built: content-plan covers how lines were picked from the scripts and checked (verbatim match, no duplicates, grade spread); design-plan's "현재 화면" section describes the final screen. Update them if you change the design or data rules.
+- `plans/*.md` (Korean) record how the content and design were built: content-plan covers how lines were picked from the scripts and checked (verbatim match, no duplicates, grade spread); design-plan's "현재 화면" section describes the final screen; gif-plan covers the GIF feature and its "남은 작업" checklist (open follow-ups). Update them if you change the design or data rules.
+- `login.md` holds only a one-line note, "로그인구현" (implement login). There is no login code yet.
 - `.claude/output-styles/beginner.md` is a project output style that explains things for a programming beginner in plain Korean.
 - Code comments are in Korean. Match that when adding comments.
